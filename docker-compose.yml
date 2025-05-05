@@ -1,0 +1,28 @@
+version: '3.8'
+services:
+  mysqldb:
+    image: mysql:8.0
+    container_name: mysqldb
+    ports:
+      - "3306:3306"
+    environment:
+      - MYSQL_ROOT_PASSWORD=root
+      - MYSQL_DATABASE=sbms
+    volumes:
+      - ./mysql-data:/var/lib/mysql
+    networks:
+      - spring-boot-db-net
+
+  application:
+    image: spring-boot-mysql-docker-compose
+    container_name: spring-boot-mysql-docker-compose
+    ports:
+      - "8080:8070"  # Host:Container
+    depends_on:
+      - mysqldb
+    networks:
+      - spring-boot-db-net
+
+networks:
+  spring-boot-db-net:
+    driver: bridge
